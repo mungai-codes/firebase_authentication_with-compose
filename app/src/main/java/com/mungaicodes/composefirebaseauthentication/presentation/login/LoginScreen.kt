@@ -160,7 +160,7 @@ fun LoginScreen(
         }
         Spacer(modifier = Modifier.height(1.dp))
         Button(
-            onClick = { /*TODO*/ },
+            onClick = { viewModel.crashlyticsTest() },
             enabled = true,
             modifier = Modifier
                 .fillMaxWidth()

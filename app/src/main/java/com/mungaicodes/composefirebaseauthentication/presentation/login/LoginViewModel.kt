@@ -6,6 +6,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.mungaicodes.composefirebaseauthentication.util.Constants.TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -87,7 +88,9 @@ class LoginViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    companion object {
-        const val TAG: String = "Mungai"
+    fun crashlyticsTest() {
+        Log.i(TAG, "Causes a crash!")
+        throw RuntimeException("exception")
     }
+
 }
