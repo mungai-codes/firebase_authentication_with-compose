@@ -1,6 +1,9 @@
 package com.mungaicodes.composefirebaseauthentication.presentation.login
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -28,10 +32,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.mungaicodes.composefirebaseauthentication.R
 import com.mungaicodes.composefirebaseauthentication.ui.theme.ComposeFirebaseAuthenticationTheme
+import com.mungaicodes.composefirebaseauthentication.ui.theme.Shapes
 import com.mungaicodes.composefirebaseauthentication.util.UiEvent
 import kotlinx.coroutines.flow.collectLatest
 
+@OptIn(ExperimentalMaterialApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun LoginScreen(
@@ -40,12 +47,13 @@ fun LoginScreen(
 
     val state = viewModel.uiState.collectAsState().value
     val focusManager = LocalFocusManager.current
-
     var isPasswordVisible by remember {
         mutableStateOf(false)
     }
-
     val scaffoldState = rememberScaffoldState()
+    var clicked by remember {
+        mutableStateOf(false)
+    }
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
@@ -75,7 +83,9 @@ fun LoginScreen(
         }
     ) {
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(start = 20.dp, end = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -91,7 +101,7 @@ fun LoginScreen(
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(8.dp),
-                    modifier = Modifier.padding(all = 10.dp)
+                    modifier = Modifier.padding(all = 8.dp)
                 ) {
                     OutlinedTextField(
                         value = state.email,
@@ -191,7 +201,6 @@ fun LoginScreen(
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(1.dp))
             Button(
                 onClick = {
                     //viewModel.crashlyticsTest()
@@ -199,7 +208,7 @@ fun LoginScreen(
                 enabled = true,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
+                    .padding(start = 70.dp, end = 70.dp),
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
             ) {
                 Text(
@@ -208,6 +217,51 @@ fun LoginScreen(
                     color = Color.Black,
                     fontSize = 16.sp
                 )
+            }
+            Spacer(modifier = Modifier.height(2.dp))
+            Surface(
+                onClick = { clicked = !clicked },
+                shape = Shapes.medium,
+                border = BorderStroke(1.dp, Color.LightGray),
+                color = MaterialTheme.colors.surface,
+                modifier = Modifier
+                    .wrapContentSize()
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .wrapContentSize()
+                        .padding(start = 12.dp, end = 16.dp, top = 12.dp, bottom = 12.dp)
+                        .animateContentSize(
+                            animationSpec = tween(
+                                durationMillis = 500,
+                                easing = LinearOutSlowInEasing
+                            )
+                        )
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_google_logo),
+                        contentDescription = "Google button.",
+                        tint = Color.Unspecified
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = if (clicked) "loading..." else "Sign up with Google",
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black,
+                        fontSize = 16.sp
+                    )
+                    if (clicked) {
+                        Spacer(modifier = Modifier.width(16.dp))
+                        CircularProgressIndicator(
+                            modifier = Modifier
+                                .height(16.dp)
+                                .width(16.dp),
+                            strokeWidth = 2.dp,
+                            color = MaterialTheme.colors.primary
+                        )
+                    }
+                }
             }
 
         }
