@@ -5,4 +5,5 @@ data class LoginUiState(
     val password: String = "",
     val isEmailValid: Boolean = false,
     val isPasswordValid: Boolean = false,
+    val loginSuccess: Boolean = false
 )
