@@ -10,8 +10,11 @@ import com.google.firebase.ktx.Firebase
 import com.mungaicodes.composefirebaseauthentication.util.Constants.TAG
 import com.mungaicodes.composefirebaseauthentication.util.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -107,6 +110,9 @@ class LoginViewModel @Inject constructor() : ViewModel() {
             }
         }
     }
+
+
+
 
 //    fun crashlyticsTest() {
 //        Log.i(TAG, "Causes a crash!")
